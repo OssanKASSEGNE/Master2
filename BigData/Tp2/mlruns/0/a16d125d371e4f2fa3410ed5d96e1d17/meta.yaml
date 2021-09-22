@@ -1,0 +1,15 @@
+artifact_uri: file:///info/etu/m2/s177927/Master2/BigData/Tp2/mlruns/0/a16d125d371e4f2fa3410ed5d96e1d17/artifacts
+end_time: 1632303206716
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: a16d125d371e4f2fa3410ed5d96e1d17
+run_uuid: a16d125d371e4f2fa3410ed5d96e1d17
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1632303205005
+status: 3
+tags: []
+user_id: s177927
