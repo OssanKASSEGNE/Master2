@@ -1,0 +1,152 @@
+4 
+db.restaurants.findOne()
+db.restaurants.find().limit(1)
+
+5
+ db.restaurants.find( {"name": "Nordic Delicacies" } )
+
+6
+db.restaurants.find( {"name": "Nordic Delicacies" },{ "address": 1} )
+
+7
+Mon nouveau resto’ qui 
+se situe Avenue Laennec au Mans et dont la cuisine est ‘trop bonne
+db.restaurants.insert(
+	{"address": { "street": "Avenue Laennec"}, "borough": "le Mans", "grades": [{ grade :"Trop bonne"}], "name": "Mon nouveau resto", }
+)
+
+8
+db.restaurants.count()
+25360
+
+9
+db.restaurants.find( {"name": "Mon nouveau resto" } )
+
+10
+ db.restaurants.find( {"cuisine": "Hamburgers" } ).count()
+ 443
+ 
+11
+ db.restaurants.find( {"borough": "Brooklyn" } ).count()
+ 6086
+ 
+ 12
+db.restaurants.find( {"borough": "Brooklyn", "cuisine": "Hamburgers", "grades.score" : 8 }, {"name" : 1})
+
+13
+db.restaurants.find({"name": /^T/}, {address : 0, grades: 0})
+
+14 (à refaire)
+db.restaurants.find().sort( { restaurant_id : 1} ).limit(1)
+
+15
+db.restaurants.update({name:"Mon nouveau resto"},{$set : {attribut_sup: 0}})
+
+16
+db.restaurants.update( {name:"Mon nouveau resto"},{ $push : {grades :[{grade : "D" , score :1}] }})
+
+17
+db.restaurants.remove({name:"Mon nouveau resto"},{justOne : true})
+
+18 Mise à jour et aggrégattion
+
+db.restaurants.aggregate( [
+   {
+     $group: {
+       _id: "$address.zipcode",
+       count:{$sum:1}}
+     }
+   },
+] )
+
+19
+db.restaurants.aggregate([
+	
+     {
+     	$group: {
+       	_id: "$address.zipcode",
+      		 count:{$sum:1}
+    		 }
+    }
+   ,
+   {
+   	$limit : 5
+   }
+ ])
+ 
+ 20
+ 19
+db.restaurants.aggregate([
+	
+     {
+     	$group: {
+       	_id: "$address.zipcode",
+      		 count:{$sum:1}
+    		 }
+    }
+   ,
+   {
+   	$limit : 5
+   }
+   ,
+   {
+   	$sort : {address.zipcode : 1},
+   },
+ ])
+
+21
+
+db.restaurants.aggregate([
+	{ $match: {cuisine : "Hamburgers" } }
+     {
+     	$group: {
+       	_id: "$address.zipcode",
+      		 count:{$sum:1}
+    		 }
+    }
+   ,
+   {
+   	$limit : 5
+   }
+   ,
+   {
+   	$sort : {address.zipcode : 1},
+   },
+ ])
+
+22
+db.restaurants.aggregate([
+     { $match: {cuisine : "Hamburgers" } }
+     {
+     	$group: {
+       	_id: "$address.zipcode",
+      		 count:{$sum:1}
+    		 }
+    }
+   ,
+   {
+   	$sort : {address.zipcode : 1},
+   },
+   
+   { $out: "zipCodes" }
+ ])
+
+23
+db.restaurants.find({zipcode }){aggregate([
+     { $match: {cuisine : "Hamburgers" } }
+     {
+     	$group: {
+       	_id: "$address.zipcode",
+      		 count:{$sum:1}
+    		 }
+    }
+   ,
+   {
+   	$sort : {address.zipcode : 1},
+   },
+   
+   { $out: "zipCodes" }
+ ])
+
+
+
