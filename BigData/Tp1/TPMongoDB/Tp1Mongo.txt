@@ -1,0 +1,182 @@
+2
+db
+show dbs
+use s177927
+show collections
+
+3
+db.restaurants.count()
+? Ajouter nombre de restaurants
+
+4 
+db.restaurants.findOne()
+db.restaurants.find().limit(1)
+
+5
+ db.restaurants.find( {"name": "Nordic Delicacies" } )
+
+6
+db.restaurants.find( {"name": "Nordic Delicacies" },{ "address": 1 , _id : 0} )
+
+7
+db.restaurants.insert(
+	{"address": { "street": "Avenue Laennec"}, "borough": "Le Mans", "grades": [{ grade :"Trop bonne"}], "name": "Mon nouveau resto", }
+)
+
+8
+db.restaurants.count()
+25360 ? check nombre de restaurants
+
+9
+db.restaurants.find( {"borough": "Le Mans" } )
+
+10
+db.restaurants.find( {"cuisine": "Hamburgers" } ).count()
+443 ? check nombre de restaurants
+ 
+11
+db.restaurants.find( {"cuisine": "Hamburgers", "borough": "Brooklyn" } ).count()
+6086 ? check nombre de restaurants
+ 
+12
+db.restaurants.find( {"cuisine": "Hamburgers", "borough": "Brooklyn", "grades.score" : 8 }, {"name" : 1, _id : 0})
+
+13
+db.restaurants.find({"name": /^T/}, {address : 0, grades: 0})
+
+14 
+db.restaurants.find().sort( { restaurant_id : 1} ).limit(1)
+
+15
+db.restaurants.update({name:"Mon nouveau resto"},{$set : {attribut_sup: 0}})
+
+16
+db.restaurants.update( 
+  {name:"Mon nouveau resto"},
+  { $push : {grades : {grade : "D" , score : 1 } } }
+)
+? needs testing
+
+17
+db.restaurants.remove({name:"Mon nouveau resto"},{justOne : true})
+
+18 Mise à jour et aggrégattion
+db.restaurants.aggregate( [
+   {
+     $group: {
+       _id: "$address.zipcode",
+       count:{ $sum : 1}
+     }
+   },
+] );
+
+19
+db.restaurants.aggregate([
+    {
+     	$group: {
+       	_id   : "$address.zipcode",
+      	count :{  $sum : 1 }
+    	}
+    },
+   { $limit : 5},
+]);
+ 
+ 20
+db.restaurants.aggregate([
+    {
+     	$group: {
+       	_id   : "$address.zipcode",
+      	count : { $sum : 1 }
+    	}
+    },
+    { $limit : 5},
+    { $sort : {"_id" : 1} }
+]);
+
+21
+db.restaurants.aggregate([
+	{ $match: {cuisine : "Hamburgers" } },
+  {
+    $group: {
+      _id: "$address.zipcode",
+      count:{$sum:1}
+    }
+  },
+  { $limit : 5},
+  { $sort : {"_id" : 1} }
+]);
+
+22
+db.restaurant.aggregate([
+	{ $match: {cuisine : "Hamburgers" } },
+  {
+    $group: {
+      _id: "$address.zipcode",
+      count:{$sum:1}
+    }
+  },
+  { $sort : {"_id" : 1} },
+  { $out: "comptage" }
+]);
+
+23
+db.comptage.find().sort( {count : -1 } ).limit(10)
+
+db.comptage.aggregate([
+  { $sort : {"count" : -1} },
+  { $limit : 10 },
+ ]);
+
+24
+db.comptage.find( {count : {$gt : 5 } })
+
+db.comptage.aggregate([
+  { $match : {count : {$gt : 5 } } }
+]);
+
+25
+db.restaurants.mapReduce(
+  function() { emit(this.cuisine, 1);},
+  function(key, values) {return Array.sum(values)},
+  {
+    out: "comptage"
+  }
+);
+
+26
+db.restaurants.mapReduce(
+  function() { emit(this.borough, 1);},
+  function(key, values) {return Array.sum(values)},
+  {
+    out: "comptage"
+  }
+);
+
+27
+db.restaurants.mapReduce(
+  function() { emit(this.address.zipcode, 1);},
+  function(key, values) {return Array.sum(values)},
+  {
+    out: "comptage"
+  }
+);
+
+28
+db.restaurants.mapReduce(
+  function() { emit(this.address.zipcode, 1);},
+  function(key, values) {return Array.sum(values)},
+  {
+    query : { cuisine : "Hamburgers"},
+    out: "comptage"
+  }
+);
+
+29
+db.restaurants.mapReduce(
+  function() { emit(this.address.zipcode, this.grades.score);},
+  function(key, values) {return Array.sum(values.flat())},
+  {
+
+    out: "comptage"
+  }
+);

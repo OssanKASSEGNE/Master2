@@ -1,9 +1,18 @@
+/*
+*@author Ossan KASSEGNE M2 INFO
+*
+*/
 
-/***************************************/
-/*		        TRAINING */
-/**************************************/
 
-voitures([X1,X2,X3,X4,X5,X6]) :-  /* définition des domaines */  
+
+  /*************************************/
+ /*		       Training			      */
+/*************************************/
+
+%Part1 With all constraints
+voitures([X1,X2,X3,X4,X5,X6]) :-
+
+	% Domains definition
 	fd_domain(X1,[1]),   
 	fd_domain(X2,[3]),  
 	fd_domain(X3,2,3),
@@ -11,6 +20,27 @@ voitures([X1,X2,X3,X4,X5,X6]) :-  /* définition des domaines */
 	fd_domain(X5,2,3),
 	fd_domain(X6,2,3),
 	/* définition des contraintes */  
+	X4#=X5,
+	X4#=X6,
+	X3#<X4,
+	X1#<X4,
+	X2#<X4,
+	X5#=X6,
+
+	fd_labeling([X1,X2,X3,X4,X5,X6]).
+
+%Part2 With less constraints
+voitures([X1,X2,X3,X4,X5,X6]) :-
+
+	% Domains definition
+	fd_domain(X1,[1]),   
+	fd_domain(X2,[3]),  
+	fd_domain(X3,2,3),
+	fd_domain(X4,1,3),
+	fd_domain(X5,2,3),
+	fd_domain(X6,2,3),
+
+	% Constraints 
 	fd_cardinality([X4#=X5,X4#=X6,X3#<X4,X1#<X4,X2#<X4,X5#=X6],Nbc),
 	Nbc#>2,
 	
@@ -20,21 +50,10 @@ voitures([X1,X2,X3,X4,X5,X6]) :-  /* définition des domaines */
 
 
 
+  /*************************************/
+ /*		       EXO1 Reines			  */
+/*************************************/
 
-/***************************************/
-/*		        EXO1			  */
-/**************************************/
-/**
- * concat(+List1 : list, ?List2 : list, ?List3 : list).
- * concat(?List1 : list, ?List2 : list, +List3 : list).
- *
- * Succeeds if the third list is the concatenation of the first two.
- *
- * @param List1 The first (left) list to join.
- * @param List2 The second (right) list to join.
- * @param List3 The list containing all the elements of List1
- *              followed by all the elements of List2.
- */
 reines([X1,X2,X3,X4]) :-  /* définition des domaines */  
 	fd_domain([X1,X2,X3,X4],1,4), 
 	fd_all_different([X1,X2,X3,X4]),	/* 13 contraintes */
@@ -102,11 +121,6 @@ sortie([A,B,C,D]):-
 
 /*** EXO 4 : DISTRIBUTEUR ***/
 
-%Prerequisites
-%count number of solutions
-count(P,Count) :-
-        findall(1,P,L),
-        length(L,Count).
 
 	%% Part 1 CSP
 monnaie(T, P, [E2,E1,C50,C20,C10], [XE2,XE1,XC50,XC20,XC10]):-
