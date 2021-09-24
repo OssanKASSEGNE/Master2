@@ -25,7 +25,7 @@ db.restaurants.insert(
 
 8
 db.restaurants.count()
-25360 ? check nombre de restaurants
+25360 
 
 9
 db.restaurants.find( {"borough": "Le Mans" } )
@@ -36,8 +36,8 @@ db.restaurants.find( {"cuisine": "Hamburgers" } ).count()
  
 11
 db.restaurants.find( {"cuisine": "Hamburgers", "borough": "Brooklyn" } ).count()
-6086 ? check nombre de restaurants
- 
+102
+
 12
 db.restaurants.find( {"cuisine": "Hamburgers", "borough": "Brooklyn", "grades.score" : 8 }, {"name" : 1, _id : 0})
 
@@ -176,7 +176,6 @@ db.restaurants.mapReduce(
   function() { emit(this.address.zipcode, this.grades.score);},
   function(key, values) {return Array.sum(values.flat())},
   {
-
     out: "comptage"
   }
 );
