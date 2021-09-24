@@ -3,7 +3,11 @@
 *
 */
 
-
+%Prerequisites
+%count number of solutions
+count(P,Count) :-
+        findall(1,P,L),
+        length(L,Count).
 
   /*************************************/
  /*		       Training			      */
@@ -16,21 +20,26 @@ voitures([X1,X2,X3,X4,X5,X6]) :-
 	fd_domain(X1,[1]),   
 	fd_domain(X2,[3]),  
 	fd_domain(X3,2,3),
-	fd_domain(X4,1,3),
-	fd_domain(X5,2,3),
-	fd_domain(X6,2,3),
+	fd_domain(X4,1,4),
+	fd_domain(X5,2,4),
+	fd_domain(X6,2,4),
 	/* définition des contraintes */  
 	X4#=X5,
+	X5#=X6,
 	X4#=X6,
 	X3#<X4,
 	X1#<X4,
 	X2#<X4,
-	X5#=X6,
-
+	
 	fd_labeling([X1,X2,X3,X4,X5,X6]).
 
+% Results
+% voitures(L).
+% L = [1,3,2,4,4,4] 
+% L = [1,3,3,4,4,4]
+
 %Part2 With less constraints
-voitures([X1,X2,X3,X4,X5,X6]) :-
+voitures2([X1,X2,X3,X4,X5,X6],NbContraintes) :-
 
 	% Domains definition
 	fd_domain(X1,[1]),   
@@ -41,22 +50,38 @@ voitures([X1,X2,X3,X4,X5,X6]) :-
 	fd_domain(X6,2,3),
 
 	% Constraints 
-	fd_cardinality([X4#=X5,X4#=X6,X3#<X4,X1#<X4,X2#<X4,X5#=X6],Nbc),
-	Nbc#>2,
-	
+	fd_cardinality([X4#=X5,X4#=X6,X3#<X4,X1#<X4,X2#<X4,X5#=X6],NbContraintes),
+	NbContraintes#>=4,
 	
 
 	fd_labeling([X1,X2,X3,X4,X5,X6]).
 
+% Results
+% voitures2(L,N).  
+% L = [1,3,2,2,2,2]
+% N = 4 
+%
+% L = [1,3,2,3,3,3]
+% N = 5
+%
+% L = [1,3,3,2,2,2]
+% N = 4
+%
+% L = [1,3,3,3,3,3]
+% N = 4
 
 
   /*************************************/
  /*		       EXO1 Reines			  */
 /*************************************/
 
-reines([X1,X2,X3,X4]) :-  /* définition des domaines */  
+reines([X1,X2,X3,X4]) :-  
+
+	% Domains definition
 	fd_domain([X1,X2,X3,X4],1,4), 
-	fd_all_different([X1,X2,X3,X4]),	/* 13 contraintes */
+
+	% Constraints 
+	fd_all_different([X1,X2,X3,X4]),
 	
 	fd_relation([[1,3],[1,4],[2,4],[3,1],[4,1],[4,2]],[X1,X2]),
 	fd_relation([[1,2],[1,4],[2,1],[2,3],[3,2],[3,4],[4,1],[4,3]],[X1,X3]),
@@ -67,27 +92,51 @@ reines([X1,X2,X3,X4]) :-  /* définition des domaines */
 	
 	fd_labeling([X1,X2,X3,X4]).
 
-
-
+% Results
+% reines(L).
+% L = [2,4,1,3] 
+% L = [3,1,4,2]
 
 /***************************************/
-/*		        EXO3				  */
+/*		        EXO2				  */
 /**************************************/
+% version 1.0
+money([S,E,N,D,M,O,R,Y]) :-
 
+	% Domains definition
+	fd_domain([E,N,D,O,R,Y],0,9),
+	fd_domain([S,M],1,9),
 	
+	% Constraints 
+	1000*(S+M)+100*(O+E)+10*(N+R) +D +E  #= 10000*M +1000*O + 100*N + 10* E + Y,
+	fd_all_different([S,E,N,D,M,O,R,Y]),
+	
+	fd_labeling([S,E,N,D,M,O,R,Y]).
+
+% Results
+% money(R)
+% R = [9,5,6,7,1,0,8,2]
+
+%version2.0	
 money2([S,E,N,D,M,O,R,Y,R1,R2,R3]) :-
+
+	% Domains definition
 	fd_domain([E,N,D,O,R,Y],0,9),
 	fd_domain([S,M],1,9),
 	fd_domain([R1,R2,R3],0,1),
 	
+	% Constraints 
 	fd_all_different([S,E,N,D,M,O,R,Y]),
-	
 	D + E #= Y + 10* R1,
 	R1 + N + R #= E +R2*10,
 	R2  + E + 0 #= N + R3*10,
 	S + R3 + M #= O+ M*10,
 	
 	fd_labeling([S,E,N,D,M,O,R,Y]).
+
+% Results
+% money2(R2).
+% R2 = [9,5,6,7,1,0,8,2,1,1,0]
 
 
 
@@ -117,9 +166,16 @@ sortie([A,B,C,D]):-
 	
 	fd_labeling([A,B,C,D]).
 
+	% Results
+	% sortie(R).
+ 	% R = [4,4,4,4] On va tous au pub
 
 
-/*** EXO 4 : DISTRIBUTEUR ***/
+
+
+/***************************************/
+/*		        EXO4				  */
+/**************************************/
 
 
 	%% Part 1 CSP
