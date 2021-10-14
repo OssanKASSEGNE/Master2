@@ -1,3 +1,7 @@
+Ossan KASSEGNE M2 informatique
+
+
+
 2
 db
 show dbs
@@ -81,13 +85,13 @@ db.restaurants.aggregate([
    { $limit : 5},
 ]);
  
- 20
+20
 db.restaurants.aggregate([
     {
-     	$group: {
+     $group: {
        	_id   : "$address.zipcode",
-      	count : { $sum : 1 }
-    	}
+      		count : { $sum : 1 }
+    }
     },
     { $limit : 5},
     { $sort : {"_id" : 1} }
@@ -107,7 +111,7 @@ db.restaurants.aggregate([
 ]);
 
 22
-db.restaurant.aggregate([
+db.restaurants.aggregate([
 	{ $match: {cuisine : "Hamburgers" } },
   {
     $group: {
@@ -143,6 +147,8 @@ db.restaurants.mapReduce(
   }
 );
 
+Nouvelle collection comptage, avec le nombre de restaurants ayant la même cuisine
+
 26
 db.restaurants.mapReduce(
   function() { emit(this.borough, 1);},
@@ -173,9 +179,20 @@ db.restaurants.mapReduce(
 
 29
 db.restaurants.mapReduce(
-  function() { emit(this.address.zipcode, this.grades.score);},
-  function(key, values) {return Array.sum(values.flat())},
+  function() { 
+   	var key = this.address.zipcode;
+   	var x = this.grades;
+   	var res = 0;
+   	for (var i = 0 ; i < x.length; i++) {
+	     res+=x[i].score
+	}
+		
+  	emit(key, res);
+  },
+  function(key, values) {return Array.sum(values)},
   {
     out: "comptage"
   }
 );
+
+

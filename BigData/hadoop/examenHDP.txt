@@ -1,0 +1,5 @@
+Comment fonctionne HDFS? le pour et le contre
+Data node play node 
+Avantages Hadoop Spark
+
+Accumulateur pour accumuler un ensemble de données sur les RDD.
