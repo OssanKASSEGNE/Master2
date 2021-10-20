@@ -1,0 +1,31 @@
+From UCPOP [which they got from Prodigy].  Note: there is no operator 
+to get back down from a box...
+
+(operator 
+ GOTO
+ (params (<x>) (<y>))
+ (preconds (at robot <x>) (at porte <x> <y>) (mainvide))
+ (effect (del at robot <x>) (at robot <y>)))
+
+(operator
+ SAISIR
+ (params (<x>) (<y>))
+ (preconds (at objet <x> <y>) (at robot <y>) (mainvide))
+ (effects (del mainvide) (del at objet <x> <y>) (at tenir <x>)))
+
+(operator
+ POSER
+ (params (<x>) (<y>))
+ (preconds (at tenir <x>) (at robot <y>))
+ (effects (del at tenir <x>) (mainvide) (objet <x> <y>)))
+
+(operator
+ TRANSPORTER
+ (params (<x>) (<y>) (<z>))
+ (preconds (at robot <y>) (at porte <y> <z>) (at tenir <x>) )
+ (effects (del at robot <y>) (at robot <z>) ) )
+
+
+
+
+      

@@ -1,0 +1,23 @@
+From UCPOP [which they got from Prodigy].  Note: there is no operator 
+to get back down from a box...
+
+(operator 
+ GO-BOITE
+ (params )
+ (preconds (argent))
+ (effect (del argent) (boite) ))
+
+(operator
+ GO-TO-CINE
+ (params )
+ (preconds (argent))
+ (effect (del argent) (cinema) ))
+
+(operator
+ GET-MONEY
+ (params )
+ (preconds )
+ (effects (argent)))
+
+
+

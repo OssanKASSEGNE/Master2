@@ -1,0 +1,10 @@
+From UCPOP [which they got from Prodify]. 
+(A)
+(B)
+(C)
+(D)
+
+(preconds (at robot A)(at tenir D)(at porte A B)(at porte B A)
+	    (at objet C B))
+
+(effects (objet C A))

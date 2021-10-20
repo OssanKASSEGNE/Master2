@@ -1,0 +1,39 @@
+
+Exercice 2
+
+a---
+	Tests le problème singes bananes	
+	
+	304 nodes created.
+	goals at time 7:
+	  hasbananas 
+
+	1 GOTO_p4_p1
+	2 GET-KNIFE_p4
+	3 GOTO_p2_p4
+	4 PUSH-BOX_p3_p2
+	5 CLIMB_p3
+	6 GRAB-BANANAS_p3
+
+
+b---
+	pas de solutions pour l'exercice6 sans l'action retirer-argent
+	Solution avec Action retirer-argent
+
+	1 GO-TO-CINE
+	2 GET-MONEY
+	3 GO-BOITE
+
+
+c---
+	Solution avec exercice1 TD
+
+	goals at time 6:
+	  objet_C_A 
+
+	1 POSER_D_A
+	2 GOTO_A_B
+	3 SAISIR_C_B
+	4 TRANSPORTER_C_B_A
+	5 POSER_C_A
+
